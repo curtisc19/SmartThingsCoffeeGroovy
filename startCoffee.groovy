@@ -1,5 +1,5 @@
 definition(
-    name: "Muh Coffee Is Smart",
+    name: "SmartThings Coffee Switch",
     namespace: "smartthings",
     author: "Curtis Carney",
     description: "Dumb Coffee Maker Turned Smart",
@@ -27,7 +27,6 @@ def installed() {
 }
 
 def updated() {
-
 	unsubscribe()
 	subscribe(theSwitch, "switch.On", onHandler)
     subscribe(alarm, "water.dry", waterDryHandler)
@@ -35,24 +34,24 @@ def updated() {
 
 def onHandler(evt) {
     checkWater()
-    }
+}
     
-	def checkWater(evt) {
-    	def sensor = alarm.latestValue("water")
-        
-        if (sensor == "wet") {
-            sendPush("Your coffee is brewing!")
-       		coffee.on()
-        } else {
-            sendPush("You forgot to add water dummy! Cancelling brew.")
-        	theSwitch.off()
-        }
+def checkWater(evt) {
+	def sensor = alarm.latestValue("water")
+    
+    if (sensor == "wet") {
+        sendPush("Your coffee is brewing!")
+   		coffee.on()
+    } else {
+        sendPush("You forgot to add water dummy! Cancelling brew.")
+    	theSwitch.off()
     }
-        
-    def waterDryHandler(evt) {
-    	def switchValue = theSwitch.latestValue("switch")
-        if (switchValue == "on") {
-            theSwitch.off()
-            sendPush("Your coffee is done!")
-    	}
+}
+    
+def waterDryHandler(evt) {
+	def switchValue = theSwitch.latestValue("switch")
+    if (switchValue == "on") {
+        theSwitch.off()
+        sendPush("Your coffee is ready!")
+    }
 }
